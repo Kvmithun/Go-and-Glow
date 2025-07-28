@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customer Profile</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;700&display=swap");
+
+      :root {
+        --primary: #ff80ab;
+        --dark: #2c003e;
+        --light-bg: #ffe1ec;
+        --body-bg: #ffeef5;
+        --btn-bg: #d5006e;
+        --btn-hover-bg: #ad0057;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Raleway", sans-serif;
+      }
+
+      body {
+        background-color: var(--body-bg);
+        min-height: 100vh;
+        padding: 2rem 1.5rem;
+        color: var(--dark);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* NAVBAR STYLING */
+      .navbar {
+        width: 100%;
+        background-color: var(--light-bg);
+        padding: 1rem 2rem;
+        border-radius: 14px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 980px;
+      }
+
+      .navbar .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .navbar img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .navbar h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .navbar button {
+        padding: 0.6rem 1.2rem;
+        background-color: var(--btn-bg);
+        color: var(--primary);
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .navbar button:hover {
+        background-color: var(--btn-hover-bg);
+      }
+
+      h2 {
+        font-weight: 700;
+        font-size: 2.4rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      #shops-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.75rem;
+        max-width: 980px;
+        width: 100%;
+      }
+
+      .shop-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 1.8rem 2.2rem;
+        width: 280px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 0.7s forwards;
+      }
+
+      .shop-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .shop-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 16px 16px 0 0;
+        margin-bottom: 1rem;
+      }
+
+      .shop-card h3 {
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .shop-card p {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.6rem;
+        color: #444;
+      }
+
+      .shop-card button {
+        margin-top: 0.5rem;
+        padding: 0.85rem 1.4rem;
+        background-color: var(--btn-bg);
+        color: var(--primary);
+        border: none;
+        border-radius: 30px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .shop-card button:hover:not(:disabled) {
+        background-color: var(--btn-hover-bg);
+        box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
+      }
+
+      .shop-card button:disabled {
+        background-color: #aaa;
+        color: #666;
+        cursor: not-allowed;
+      }
+
+      #message {
+        margin-top: 2.5rem;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--primary);
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        .navbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .navbar .logo-title {
+          justify-content: center;
+          width: 100%;
+        }
+
+        .navbar button {
+          align-self: flex-end;
+        }
+
+        .shop-card {
+          width: 90%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+      <div class="logo-title">
+        <img src="static/images/logo.png" alt="Logo" />
+        <h1>Go and Glow</h1>
+      </div>
+      <button onclick="logout();">Logout</button>
+    </div>
+
+    <h2>Welcome! Book Nearby Salons</h2>
+
+    <div id="shops-container">Loading nearby salons...</div>
+    <div id="message"></div>
+
+    <script>
+      let customer =
+        JSON.parse(localStorage.getItem("customerProfile")) || null;
+
+      async function promptCustomerProfile() {
+        let name = prompt("Enter your full name:");
+        let email = prompt("Enter your email:");
+
+        const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+        if (name && email && emailRegex.test(email)) {
+          customer = { name, email, role: "customer" };
+          localStorage.setItem("customerProfile", JSON.stringify(customer));
+        } else {
+          alert("Valid name and email are required.");
+        }
+      }
+
+      async function fetchNearbyShops(lat, lng) {
+        const container = document.getElementById("shops-container");
+        container.innerText = "Loading...";
+        try {
+          const res = await fetch(`/nearby-shops?lat=${lat}&lng=${lng}`);
+          if (!res.ok) throw new Error("Failed to fetch shops");
+          const shops = await res.json();
+          displayShops(shops);
+        } catch (err) {
+          container.innerText = "Error loading salons.";
+          console.error(err);
+        }
+      }
+
+      function displayShops(shops) {
+        const container = document.getElementById("shops-container");
+        container.innerHTML = "";
+
+        if (!shops.length) {
+          container.innerHTML = "<p>No salons found nearby.</p>";
+          return;
+        }
+
+        shops.forEach((shop) => {
+          const card = document.createElement("div");
+          card.className = "shop-card";
+          card.innerHTML = `
+        <img src="${
+          shop.profilePic || "https://via.placeholder.com/280x160?text=No+Image"
+        }"
+             onerror="this.onerror=null; this.src='https://via.placeholder.com/280x160?text=No+Image';"
+             class="shop-img" />
+        <h3>${shop.shop || "Salon"}</h3>
+        <p><strong>Owner:</strong> ${shop.name || "N/A"}</p>
+        <p><strong>Distance:</strong> ${shop.distance} km</p>
+        <button onclick="bookAppointment('${shop.email}', '${
+            shop.name || "Owner"
+          }', this)">Book Now</button>
+      `;
+          container.appendChild(card);
+        });
+      }
+
+      async function bookAppointment(owner_email, owner_name, btn) {
+        if (!customer) {
+          alert("Please provide your profile first.");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Booking...";
+
+        const bookingData = {
+          owner_email,
+          customer_email: customer.email,
+          customer_name: customer.name,
+          time: new Date().toISOString(),
+          service: "Haircut",
+        };
+
+        try {
+          const res = await fetch("/book-appointment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bookingData),
+          });
+
+          const result = await res.json();
+          if (result.status === "success") {
+            btn.innerText = "Booked ✅";
+            document.getElementById(
+              "message"
+            ).innerText = `Appointment booked with ${owner_name}`;
+          } else {
+            btn.innerText = "Try Again ❌";
+            btn.disabled = false;
+          }
+        } catch (e) {
+          console.error("Error booking:", e);
+          btn.innerText = "Retry";
+          btn.disabled = false;
+        }
+      }
+
+      async function init() {
+        if (!customer) await promptCustomerProfile();
+
+        if (!customer) {
+          document.getElementById("shops-container").innerHTML =
+            "<p>Profile is required to book salons.</p>";
+          return;
+        }
+
+        if (!navigator.geolocation) {
+          document.getElementById("shops-container").innerText =
+            "Geolocation not supported by your browser.";
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            fetchNearbyShops(pos.coords.latitude, pos.coords.longitude);
+          },
+          (err) => {
+            document.getElementById("shops-container").innerText =
+              "Please allow location access.";
+            console.error(err);
+          }
+        );
+      }
+
+      window.onload = init;
+
+      function logout() {
+        localStorage.clear();
+        window.location.href = "/"; // redirects to home.html
+      }
+    </script>
+  </body>
+</html>

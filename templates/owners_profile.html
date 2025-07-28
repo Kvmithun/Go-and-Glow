@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TrimTime – Owner Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Raleway", sans-serif;
+        min-height: 100vh;
+        background: #fff0f5;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 100vh;
+        width: 100%;
+      }
+
+      /* Left Panel */
+      .left-panel {
+        flex-basis: 40%;
+        background: linear-gradient(135deg, #ffe4ec, #fff5f9);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+      }
+
+      .logo-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #f3dce4;
+        flex-wrap: nowrap;
+      }
+
+      .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo-title img {
+        height: 60px;
+      }
+
+      .logo-title h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.6rem;
+        color: #d63384;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .middle-content {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+      }
+
+      .owner-perspective {
+        font-size: 1.1rem;
+        color: #333c57; /* rich slate blue-gray: clean, trustworthy, professional */
+        font-style: italic;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 2rem;
+        border-top: 1px solid #f3dce4;
+
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      /* Logout button at bottom */
+      #logout-btn {
+        background: none;
+        border: none;
+        color: #d63384;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+        margin: 1.5rem 2rem;
+        align-self: flex-start;
+      }
+
+      #logout-btn:hover {
+        color: #a01e55;
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
+
+      /* Right Panel */
+      .right-panel {
+        flex-basis: 60%;
+        background: white;
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 650px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        animation: slideUp 0.8s ease;
+      }
+
+      h2 {
+        font-size: 2rem;
+        color: #d63384;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 0.9rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      label {
+        font-weight: 600;
+        color: #333;
+        margin-top: 0.5rem;
+        display: block;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #d63384;
+        outline: none;
+      }
+
+      button {
+        background: #d63384;
+        color: white;
+        padding: 0.95rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: #bf2a75;
+        transform: translateY(-2px);
+      }
+
+      .profile-pic-preview {
+        width: 100%;
+        max-height: 320px;
+        border-radius: 16px;
+        object-fit: contain;
+        background-color: #f9f0f4;
+        box-shadow: 0 8px 20px rgba(214, 51, 132, 0.3);
+        display: block;
+        margin-bottom: 2rem;
+      }
+
+      .appointments {
+        margin-top: 2rem;
+      }
+
+      .appointments h3 {
+        font-size: 1.3rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+      }
+
+      .appointments ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .appointments li {
+        background: #fff0f5;
+        margin-bottom: 0.6rem;
+        padding: 0.9rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .info-text {
+        font-size: 1rem;
+        color: #444;
+        margin: 0.4rem 0;
+        text-align: center;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .left-panel,
+        .right-panel {
+          flex-basis: 100%;
+        }
+
+        .logo-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .logo-title h1 {
+          font-size: 1.4rem;
+        }
+
+        .logo-title img {
+          height: 50px;
+        }
+
+        .owner-perspective {
+          text-align: center;
+        }
+
+        .middle-content {
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="logo-header">
+          <div class="logo-title">
+            <img src="/static/images/logo.png" alt="Logo" />
+            <h1>Go and Glow</h1>
+          </div>
+          <button id="logout-btn">Logout</button>
+        </div>
+        <div class="owner-perspective">
+          Discover a new standard of care and comfort at TrimTime — where style
+          meets sophistication. Whether you're booking a quick trim or a full
+          transformation, our expert team ensures every appointment is
+          personalized, seamless, and unforgettable. Your time. Your style.
+          Perfectly scheduled.
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <!-- Profile Setup Card -->
+        <div class="card" id="profile-card">
+          <h2>Set Up Your Shop</h2>
+          <input type="text" id="name" placeholder="Owner Name" />
+          <input type="email" id="email" placeholder="Email" />
+          <input type="text" id="shop" placeholder="Shop Name / Details" />
+
+          <label for="open">Opening Time:</label>
+          <input type="time" id="open" />
+
+          <label for="close">Closing Time:</label>
+          <input type="time" id="close" />
+
+          <label>Profile Picture:</label>
+          <input type="file" id="profile-pic" accept="image/*" />
+          <img id="preview" class="profile-pic-preview" />
+
+          <button onclick="submitProfile()">Save & Proceed</button>
+        </div>
+
+        <!-- Dashboard Card -->
+        <div class="card" id="dashboard-card" style="display: none">
+          <h2>Welcome, <span id="owner-name"></span></h2>
+          <img id="owner-pic" class="profile-pic-preview" />
+          <p class="info-text">
+            <strong>Email:</strong> <span id="owner-email"></span>
+          </p>
+          <p class="info-text">
+            <strong>Shop:</strong> <span id="owner-shop"></span>
+          </p>
+          <p class="info-text">
+            <strong>Open:</strong> <span id="owner-open"></span> —
+            <strong>Close:</strong> <span id="owner-close"></span>
+          </p>
+          <p class="info-text">
+            <strong>Location:</strong> <span id="owner-loc"></span>
+          </p>
+
+          <div class="appointments">
+            <h3>Your Appointments</h3>
+            <ul id="appointments-list">
+              <li>Loading appointments...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load dashboard if profile exists
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("/get-owner-details")
+          .then((res) => res.json())
+          .then((data) => {
+            if (Object.keys(data).length === 0) return;
+
+            document.getElementById("profile-card").style.display = "none";
+            document.getElementById("dashboard-card").style.display = "block";
+
+            document.getElementById("owner-name").innerText = data.name;
+            document.getElementById("owner-email").innerText = data.email;
+            document.getElementById("owner-shop").innerText = data.shop;
+            document.getElementById("owner-open").innerText = data.open;
+            document.getElementById("owner-close").innerText = data.close;
+            document.getElementById("owner-loc").innerText = `(${Number(
+              data.lat
+            ).toFixed(4)}, ${Number(data.lng).toFixed(4)})`;
+            document.getElementById("owner-pic").src = data.profilePic || "";
+            document.getElementById("owner-pic").style.display = "block";
+
+            loadAppointments();
+          });
+      });
+
+      // Handle profile picture preview
+      document
+        .getElementById("profile-pic")
+        .addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById("preview");
+              preview.src = e.target.result;
+              preview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+      // Save profile data
+      function submitProfile() {
+        if (!navigator.geolocation) {
+          alert("Please enable location access.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const data = {
+              name: document.getElementById("name").value.trim(),
+              email: document.getElementById("email").value.trim(),
+              shop: document.getElementById("shop").value.trim(),
+              open: document.getElementById("open").value,
+              close: document.getElementById("close").value,
+              profilePic: document.getElementById("preview").src || "",
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude,
+            };
+
+            fetch("/save-owner-details", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            })
+              .then((res) => res.json())
+              .then((response) => {
+                if (response.status === "success") window.location.reload();
+                else alert("Failed to save details.");
+              });
+          },
+          () => {
+            alert("Location access denied.");
+          }
+        );
+      }
+
+      function loadAppointments() {
+        fetch("/owner-appointments")
+          .then((res) => res.json())
+          .then((appointments) => {
+            const list = document.getElementById("appointments-list");
+            if (!appointments.length) {
+              list.innerHTML = "<li>No appointments yet.</li>";
+              return;
+            }
+
+            list.innerHTML = appointments
+              .map(
+                (appt) => `
+                <li>
+                  <strong>${appt.customer_name}</strong> booked <em>${
+                  appt.service
+                }</em><br/>
+                  <small>${new Date(appt.time).toLocaleString()}</small>
+                </li>`
+              )
+              .join("");
+          })
+          .catch(() => {
+            document.getElementById("appointments-list").innerHTML =
+              "<li>Failed to load appointments.</li>";
+          });
+      }
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        window.location.href = "/";
+      });
+    </script>
+  </body>
+</html>

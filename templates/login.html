@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Go and Glow - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      /* Global Reset */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #fff6e8;
+        color: #333;
+        animation: fadeIn 0.8s ease-in;
+      }
+
+      /* Fade-in animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Header */
+      header {
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        padding: 10px 40px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        gap: 12px;
+      }
+
+      header .logo {
+        height: 64px;
+      }
+
+      header h1 {
+        font-size: 26px;
+        color: #f06277;
+        font-weight: bold;
+      }
+
+      /* Login Container */
+      .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 80px);
+        background-color: #fff6e8;
+        padding: 30px;
+      }
+
+      /* Login Card */
+      .login-card {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      /* Logo inside Card */
+      .login-card .logo {
+        height: 80px;
+        margin-bottom: 24px;
+      }
+
+      /* Heading */
+      .login-card h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      /* Flash Messages */
+      .message {
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      .message.success {
+        color: green;
+      }
+
+      .message.error {
+        color: red;
+      }
+
+      /* Form Fields */
+      form label {
+        display: block;
+        text-align: left;
+        font-size: 14px;
+        margin: 8px 0 4px;
+        color: #444;
+      }
+
+      form input[type="email"],
+      form input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 16px;
+        font-size: 14px;
+        transition: border 0.3s ease;
+      }
+
+      form input[type="email"]:focus,
+      form input[type="password"]:focus {
+        border-color: #f06277;
+        outline: none;
+      }
+
+      /* Submit Button */
+      form input[type="submit"],
+      form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #f06277;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 24px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      form input[type="submit"]:hover,
+      form button:hover {
+        background-color: #e14c65;
+      }
+
+      /* Register Link */
+      .login-card p {
+        margin-top: 16px;
+        font-size: 14px;
+      }
+
+      .login-card a {
+        color: #f06277;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .login-card a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER WITH LOGO -->
+    <header>
+      <img src="static/images/logo.png" alt="Logo" class="logo" />
+
+      <h1>Go and Glow</h1>
+    </header>
+
+    <!-- LOGIN CARD -->
+    <div class="login-container">
+      <div class="login-card">
+        <img src="static/images/logo.png" alt="Logo" class="logo" />
+
+        <h2>Login</h2>
+
+        {% if message %}
+        <p class="message success">{{ message }}</p>
+        {% endif %} {% if messages %}
+        <p class="message error">{{ messages }}</p>
+        {% endif %}
+
+        <form action="/perform-login" method="post">
+          <input type="hidden" name="role" value="{{ role }}" />
+
+          <label for="email">Email</label>
+          <input type="email" name="user_email" id="email" required />
+
+          <label for="password">Password</label>
+          <input type="password" name="user_password" id="password" required />
+
+          <input
+            type="submit"
+            value="{% if role == 'owner' %}Login as Owner{% else %}Login as Customer{% endif %}"
+          />
+
+          <p>
+            Don’t have an account?
+            <a href="/register?role={{ role }}">Register here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

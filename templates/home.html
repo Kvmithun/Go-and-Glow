@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go and Glow – Book Salons Near You</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      :root {
+        --primary: #f38e8e;
+        --dark: #1f2937;
+        --light: #fef2f2;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Raleway", sans-serif;
+        background-color: #fff;
+        color: #333;
+        scroll-behavior: smooth;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 3rem;
+        background: white;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+        position: sticky;
+        top: 0;
+        z-index: 999;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-section img {
+        height: 70px;
+        margin-right: 12px;
+      }
+
+      .logo-section h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+      }
+
+      nav a:hover {
+        color: var(--primary);
+      }
+
+      .hero {
+        display: flex;
+        height: 90vh;
+      }
+
+      .hero-left {
+        flex: 1;
+        background: url("{{ url_for('static', filename='images/bg-home.png') }}")
+          no-repeat center center/cover;
+      }
+
+      .hero-right {
+        flex: 1;
+        background: var(--light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .finder-card {
+        background: white;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        animation: fadeInUp 1s ease-in;
+      }
+
+      .finder-card h2 {
+        font-size: 2.2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .finder-card p {
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+      }
+
+      .find-btn {
+        background-color: var(--primary);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .find-btn:hover {
+        background-color: #e66b6b;
+      }
+
+      section {
+        padding: 5rem 2rem;
+      }
+
+      h2.section-title {
+        text-align: center;
+        font-size: 2.6rem;
+        margin-bottom: 3rem;
+        animation: fadeInDown 1s;
+      }
+
+      .steps,
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .step,
+      .card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        animation: fadeInUp 1s ease-in;
+      }
+
+      .step h3,
+      .card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+
+      .cta {
+        background: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 4rem 2rem;
+        animation: slideInUp 1s;
+      }
+
+      .cta h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .btn-register {
+        background: white;
+        color: var(--primary);
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: 2px solid white;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+      }
+
+      .btn-register:hover {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        transform: scale(1.05);
+      }
+
+      footer {
+        background: var(--dark);
+        color: #ddd;
+        text-align: center;
+        padding: 2rem;
+        font-size: 0.9rem;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          transform: translateY(100px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          flex-direction: column;
+          height: auto;
+        }
+
+        .hero-left,
+        .hero-right {
+          width: 100%;
+          height: 50vh;
+        }
+
+        nav {
+          flex-direction: column;
+          align-items: flex-end;
+        }
+
+        nav a {
+          margin: 0.5rem 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header>
+      <div class="logo-section">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="Logo"
+        />
+        <h1>Go and Glow</h1>
+      </div>
+      <nav>
+        <a href="#how-it-works">How it Works</a>
+        <a href="#services">Services</a>
+        <a href="#cta">Join</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-left"></div>
+      <div class="hero-right">
+        <div class="finder-card animate__animated animate__fadeInUp">
+          <h2>Find Salons Near You</h2>
+          <p>Click below to discover top salons around you.</p>
+          <a href="{{ url_for('register', role='customer') }}" class="find-btn"
+            >Find Now</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+      <h2 class="section-title animate__animated animate__fadeInDown">
+        How Go and Glow Works
+      </h2>
+      <div class="steps">
+        <div class="step">
+          <h3>1. Browse</h3>
+          <p>Explore top salons based on ratings, services & reviews.</p>
+        </div>
+        <div class="step">
+          <h3>2. Book</h3>
+          <p>Instant appointment scheduling — no waiting, no calls.</p>
+        </div>
+        <div class="step">
+          <h3>3. Visit</h3>
+          <p>Show up, glow up! Smooth experience every time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+      <h2 class="section-title animate__animated animate__fadeInDown">
+        Popular Services
+      </h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Hair Styling</h3>
+          <p>Modern, trendy, and tailored to your style.</p>
+        </div>
+        <div class="card">
+          <h3>Skin & Facial</h3>
+          <p>Glow-enhancing facials, peels, and rejuvenation.</p>
+        </div>
+        <div class="card">
+          <h3>Bridal Packages</h3>
+          <p>Custom wedding and event-ready beauty packages.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+      <h2>Are You a Salon Owner?</h2>
+      <p>Join Go and Glow to list your business and attract more clients!</p>
+      <button
+        class="btn-register"
+        onclick="window.location.href='/register?role=owner'"
+      >
+        Register Your Salon
+      </button>
+    </section>
+
+    <!-- Footer -->
+    <footer>&copy; 2025 Go and Glow Platform. All rights reserved.</footer>
+  </body>
+</html>
